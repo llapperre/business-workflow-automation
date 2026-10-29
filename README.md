@@ -53,6 +53,8 @@ This diagram simplifies the workflow. The supporting documents describe operatio
 - **Operational safeguards:** separate test/live execution profiles and configurable external side effects.
 - **Feedback:** order-level notifications and processing-run summaries.
 
+**Runtime environment:** PythonAnywhere (hosted Python execution).
+
 ## Supporting documentation
 
 - [System architecture](docs/architecture.md)
