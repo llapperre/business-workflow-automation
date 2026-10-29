@@ -4,7 +4,7 @@ The production workflow supports multiple order sources and a shared processing 
 
 ## 1. Collect the order
 
-Orders may be received via email, read from a customer spreadsheet, or collected from a customer portal using Playwright. Each adapter extracts relevant details such as order identifier, target site, article source, and image information.
+Orders may be received via email, read from a customer spreadsheet, collected from a customer portal using Playwright, or taken from a generated-articles spreadsheet. The AI content source reads article topics from a sheet, combines criteria-based instructions, generates articles, and writes completed articles to the sheet consumed by the publishing pipeline. Manual order additions are also supported. Each adapter extracts relevant details such as order identifier, target site, article source, and image information.
 
 ## 2. Normalize and avoid duplicates
 
@@ -20,19 +20,23 @@ The content-processing stage cleans HTML and prepares publication-ready markup, 
 
 ## 5. Prepare the image
 
-Customer-supplied images may be used when suitable. The workflow also supports finding and processing alternative images and can leave the final selection to an operator.
+Customer-supplied images may be used when suitable. The workflow also supports finding and processing alternative images.
 
-## 6. Create a WordPress post
+## 6. Discover a relevant YouTube video
 
-An integration bridge supports creating a draft or publishing, according to the execution profile and configured side-effect controls. Media and category handling are coordinated with the target site.
+The video workflow checks whether the client has a YouTube channel and searches it for suitable content. When no client channel is available, it searches a curated set of trusted channels.
 
-## 7. Record the outcome
+## 7. Create a WordPress draft
+
+An integration bridge creates a WordPress draft, including associated media and category handling, according to the execution profile and side-effect controls. Media and category handling are coordinated with the target site.
+
+## 8. Record the outcome
 
 The tracking spreadsheet is updated with status, resources, and draft or published URL where applicable. Failures and items that need manual attention remain visible.
 
-## 8. Communicate results
+## 9. Communicate results
 
-Notifications can summarize the outcome of individual orders and the overall processing run. Customer communication and exceptional decisions are still handled by a person when needed.
+Notifications can summarize the outcome of individual orders and the overall processing run. Customer communication and any subsequent editorial decisions are separate from the unattended pipeline.
 
 ## Status and operational controls
 
@@ -40,6 +44,6 @@ The process uses states such as **Received**, **Validated**, **Ready**, **Drafte
 
 Test/live execution profiles limit unwanted external effects, for example by controlling WordPress publication, spreadsheet writebacks, and marking emails as read.
 
-## Human-in-the-loop design
+## Automation boundary
 
-The goal is not to eliminate oversight. It is to minimize mechanical tasks while maintaining human control over exceptional content, images, and customer relationships.
+The pipeline can run without human intervention from intake through WordPress draft creation. Operators can add orders manually, and people may separately review drafts or communicate with clients. Those activities do not make manual intervention a prerequisite for a normal run.
