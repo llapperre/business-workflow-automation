@@ -34,17 +34,31 @@ These notes describe the reasoning behind selected design choices. They are not 
 
 **Trade-off:** State transitions and external writebacks require discipline to prevent inconsistent or misleading status.
 
+## Treat AI-generated articles as another intake source
+
+**Constraint:** Articles may originate from customer-supplied documents or from an AI generation workflow.
+
+**Approach:** Read topics from a sheet, assemble generation instructions according to multiple criteria, save generated articles to a dedicated spreadsheet, and let the publishing pipeline ingest that sheet as another source.
+
+**Trade-off:** Generation and publishing remain separate stages with an explicit handoff, allowing each to be tracked and reasoned about independently.
+
+## Discover videos from relevant YouTube sources
+
+**Approach:** First search for suitable videos on a client's YouTube channel; when no client channel is available, search a curated set of trusted channels.
+
+**QA rationale:** Source selection matters as well as topical relevance; the trusted-channel fallback avoids treating arbitrary YouTube results as equivalent.
+
 ## Handle varied source documents and imagery
 
 **Constraint:** Customer content is not consistently formatted, and images may come from different sources.
 
-**Approach:** Normalize HTML, guard against lost links, validate image suitability, and support manual image selection when needed.
+**Approach:** Normalize HTML, guard against lost links, validate image suitability, and enrich articles with relevant videos where available.
 
 **QA rationale:** It is safer to surface problematic input than to publish an apparently successful but damaged article.
 
 ## Work incrementally with production constraints
 
-External services introduce rate limits, unavailable data, changing interfaces, and differences between draft creation and public publishing. The workflow evolved through testing, debugging, and practical operational feedback.
+External services introduce rate limits, unavailable data, changing interfaces, and differences between draft creation and public publishing. The workflow evolved through testing, debugging, and practical operational feedback. Its normal unattended execution reaches WordPress draft creation; optional manual order entry and later operator activity are outside that requirement.
 
 The case study deliberately focuses on system boundaries, risk controls, and decisions rather than publishing sensitive source files.
 
