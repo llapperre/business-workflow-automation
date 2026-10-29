@@ -56,6 +56,24 @@ These notes describe the reasoning behind selected design choices. They are not 
 
 **QA rationale:** It is safer to surface problematic input than to publish an apparently successful but damaged article.
 
+## Use Google Sheets instead of a database
+
+**Context:** The tracking data is not only consumed by code. People need to read order details, inspect statuses, filter records, and occasionally make operational changes without using developer tools.
+
+**Decision:** Use Google Sheets as the shared operational tracking interface instead of introducing a separate database and building an additional interface for non-technical users.
+
+**Benefits:** The team can access the information in a familiar format, with straightforward visibility into processing results and exceptions. This reduces the need for a custom admin interface.
+
+**Trade-offs:** Sheets is not a relational database. API quotas, concurrent updates, data validation, and consistency need explicit attention. This choice fits the current business scale and workflow; it would need reassessment if volume, concurrency, or reporting requirements grew substantially.
+
+## Hosted runtime and browser compatibility
+
+**Decision:** Run the Python automation in a hosted PythonAnywhere environment rather than relying on an operator's local computer.
+
+**Operational challenge:** Playwright's browser runtime required attention to Chromium compatibility and launch configuration in that environment.
+
+**Trade-off:** Hosting supports repeatable execution but adds environment-specific dependencies that need to be tested and maintained.
+
 ## Work incrementally with production constraints
 
 External services introduce rate limits, unavailable data, changing interfaces, and differences between draft creation and public publishing. The workflow evolved through testing, debugging, and practical operational feedback. Its normal unattended execution reaches WordPress draft creation; optional manual order entry and later operator activity are outside that requirement.
